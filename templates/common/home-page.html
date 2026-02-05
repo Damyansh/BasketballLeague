@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'shared/base.html' %}
+{% block content %}
+<h2>Welcome to the Basketball League</h2>
 
-</body>
-</html>
+<h3>Teams</h3>
+<div class ="team-grid">
+    {% for team in teams %}
+    <div class="team-card">
+        <a href="{% url 'teams:details' team.pk %}">
+            <img src="{{ team.logo.url }}" alt="{{ team.name }}">
+            <p>{{ team.name }}</p>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<h3>Upcoming Games</h3>
+<div class ="games-section">
+    {% for game in games %}
+    <div class="game-card">
+        {{ game.home_team.name }} vs {{ game.away_team.name }} on {{ game.date }}
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

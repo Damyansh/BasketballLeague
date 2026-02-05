@@ -16,6 +16,7 @@ class Player(models.Model):
     points_per_game = models.FloatField()
     rebounds_per_game = models.FloatField()
     assists_per_game = models.FloatField()
+    photo =models.ImageField(upload_to='players/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

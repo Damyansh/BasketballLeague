@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'shared/base.html' %}
+{% block content %}
+<h2>Edit Player</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>Name: <input type="text" name="name" value="Player Placeholder"></p>
+    <p>Position: <input type="text" name="position" value="Position Placeholder"></p>
+    <p>Photo: <input type="file" name="photo"></p>
+    <p>Team: <input type="text" name="team" value="Team Placeholder"></p>
+    <button type="submit">Edit Player</button>
+</form>
+{% endblock %}

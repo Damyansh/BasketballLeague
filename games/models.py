@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from players.models import Player
@@ -11,6 +12,14 @@ class Game(models.Model):
     home_score = models.IntegerField()
     away_score = models.IntegerField()
     players = models.ManyToManyField(Player)
+
+    def clean(self):
+        if self.home_team == self.away_team:
+            raise ValidationError("A team cannot play against itself.")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
 
     def __str__(self):
