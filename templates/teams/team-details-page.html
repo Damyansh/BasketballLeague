@@ -1,9 +1,36 @@
 {% extends 'shared/base.html' %}
+{% load static %}
+
 {% block content %}
-<h2>Team Details</h2>
-<p>Name: Team Placeholder</p>
-<p>City: City Placeholder</p>
-<p>Year Founded: 2000</p>
-<p>Coach: Coach Name</p>
-<img src="#" alt="Team Logo" width="100">
+<h2>{{ team.name }}</h2>
+    
+{% if team.logo %}
+    <img src="{{ team.logo.url }}" alt={{ team.name }} width="100">
+{% endif %}
+    
+
+<p><strong>City:</strong> {{ team.city }}</p>
+<p><strong>Year Founded:</strong> {{ team.year_founded }}</p>
+<p><strong>Coach:</strong> {{ team.coach_name }}</p>
+    
+<h3>Players</h3>
+
+{% for player in players%}
+    <div class="player-card">
+       {% if player.photo %}
+            <img src="{{ player.photo.url }}" alt="{{ player.first_name }} {{ player.last_name }}">
+        {% endif %}
+        <div>
+            <strong>{{ player.first_name }} {{ player.last_name }}</strong><br>
+            Position: {{ player.get_position_display }}<br>
+            PPG: {{ player.points_per_game }},
+            RPG: {{ player.rebounds_per_game }},
+            APG: {{ player.assists_per_game }}
+        </div>
+    </div>
+{% empty %}
+    <p>No players added yet.</p>
+{% endfor %}
+
+<a href="javascript:history.back()">Go Back</a>
 {% endblock %}

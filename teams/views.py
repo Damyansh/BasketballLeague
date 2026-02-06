@@ -1,5 +1,5 @@
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from teams.models import Team
 
@@ -10,9 +10,11 @@ def team_add(request: HttpRequest)-> HttpResponse:
     return render(request, 'teams/team-add-page.html')
 
 def team_details(request: HttpRequest, pk:int)-> HttpResponse:
-    team = Team.objects.get(pk=pk)
+    team = get_object_or_404(Team, pk=pk)
+    players = team.players.all()
     context = {
         'team': team,
+        'players': players,
     }
     return render(request, 'teams/team-details-page.html', context)
 

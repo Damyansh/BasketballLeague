@@ -1,9 +1,15 @@
 {% load static %}
+
 <nav class="navbar">
-    <a href="{% url 'common:home' %}">Home
+    <div class = "nav-left">
+    <a href="{% url 'common:home' %}">Home</a>
+    </div>
+
+    <div class = "nav-center">
         <img src="{% static 'images/site/logo.png' %}" alt="logo">
-    </a>
-    <div>
+    </div>
+
+    <div class = "nav-right">
         <a href="{% url 'teams:add' %}">Add Team</a>
         <a href="{% url 'players:add' %}">Add Player</a>
         <a href="{% url 'games:add' %}">Add Game</a>

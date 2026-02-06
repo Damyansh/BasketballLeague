@@ -1,4 +1,6 @@
 {% extends 'shared/base.html' %}
+{% load static %}
+
 {% block content %}
 <h2>Welcome to the Basketball League</h2>
 
@@ -7,18 +9,33 @@
     {% for team in teams %}
     <div class="team-card">
         <a href="{% url 'teams:details' team.pk %}">
-            <img src="{{ team.logo.url }}" alt="{{ team.name }}">
+            {% if team.logo %}
+                <img src="{{ team.logo.url }}" alt="{{ team.name }}">
+            {% endif %}
             <p>{{ team.name }}</p>
         </a>
     </div>
     {% endfor %}
 </div>
 
-<h3>Upcoming Games</h3>
+<h3>Played Games</h3>
 <div class ="games-section">
     {% for game in games %}
     <div class="game-card">
-        {{ game.home_team.name }} vs {{ game.away_team.name }} on {{ game.date }}
+        <strong>{{ game.home_team.name }}</strong>
+        {% if game.home_team.logo %}
+            <img src="{{ game.home_team.logo.url }}" width="40">
+        {% endif %}
+
+        {{ game.home_score }} : {{ game.away_score }}
+
+        {% if game.away_team.logo %}
+            <img src="{{ game.away_team.logo.url }}" width="40">
+        {% endif %}
+
+        <strong>{{ game.away_team.name }}</strong>
+
+        <div>{{ game.date }}
     </div>
     {% endfor %}
 

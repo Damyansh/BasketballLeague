@@ -17,6 +17,11 @@ class Game(models.Model):
         if self.home_team == self.away_team:
             raise ValidationError("A team cannot play against itself.")
 
+        for player in self.players.all():
+            if player.team not in[self.home_team, self.away_team]:
+                raise ValidationError(f"Player {player} is not a member of either team.")
+
+
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
