@@ -1,8 +1,33 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-<h2>Game Details</h2>
-<p>Team 1: Team 1 Placeholder</p>
-<p>Team 2: Team 2 Placeholder</p>
-<p>Date: 2026-01-01</p>
-<p>Score: 0 - 0</p>
+<h2>{{ game.home_team.name }} vs {{ game.away_team.name }}</h2>
+<p><strong>Date:</strong> {{ game.date }}</p>
+<p><strong>Score:</strong> {{ game.home_score }} : {{ game.away_score }}</p>
+
+<h3>Players in this Game</h3>
+{% for stat in stats %}
+    <div class="player-card">
+        <strong>{{ stat.player.first_name }} {{ stat.player.last_name }}</strong><br>
+        Team: {{ stat.player.team.name }}<br>
+        Points: {{ stat.points }},
+        Rebounds: {{ stat.rebounds }},
+        Assists: {{ stat.assists }}
+
+     <br><br>
+
+        <a class="btn btn-warning btn-sm ms-4" href="{% url 'games:edit-stats' game.pk stat.pk %}">Edit</a>
+        <a class="btn btn-danger btn-sm ms-3" href="{% url 'games:delete-stats' game.pk stat.pk %}">Delete</a>
+
+    </div>
+{% empty %}
+    <p>No player statistics added yet.</p>
+{% endfor %}
+
+<a class="btn btn-success btn-sm" href="{% url 'games:add-stats' game.pk %}">Add Player Stats</a>
+
+<br><br>
+
+
+<a class ="btn btn-warning btn-sm" href="{% url 'games:edit' game.pk %}">Edit Game</a>
+<a class="btn btn-danger btn-sm" href="{% url 'games:delete' game.pk %}">Delete Game</a>
 {% endblock %}

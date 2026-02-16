@@ -1,13 +1,20 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-<h2>Edit Team</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <p>Name: <input type="text" name="name" value="Team Placeholder"></p>
-    <p>City: <input type="text" name="city" value="City Placeholder"></p>
-    <p>Year Founded: <input type="number" name="year_founded" value="2000"></p>
-    <p>Logo: <input type="file" name="logo"></p>
-    <p>Coach: <input type="text" name="coach_name" value="Coach Name"></p>
-    <button type="submit">Edit Team</button>
+<div class="edit-delete">
+    <h2>Edit Team</h2>
+    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% if form.errors %}
+            <div class="alert alert-danger">{{ form.errors }}</div>
+        {% endif %}
+
+
+        {{ form }}
+
+        <button type="submit" class="btn btn-warning mt-3">Save Changes</button>
 </form>
+</div>
 {% endblock %}

@@ -1,12 +1,11 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-<h2>Add Player</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <p>Name: <input type="text" name="name" placeholder="Player Name"></p>
-    <p>Position: <input type="text" name="position" placeholder="Position"></p>
-    <p>Photo: <input type="file" name="photo"></p>
-    <p>Team: <input type="text" name="team" placeholder="Team"></p>
-    <button type="submit">Add Player</button>
+<div class="edit-delete">
+    <h2>Add Player</h2>
+    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success mt-3" >Add Player</button>
 </form>
+</div>
 {% endblock %}

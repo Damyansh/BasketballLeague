@@ -1,0 +1,12 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<h2>Edit Player Stats</h2>
+<form method="post" class="card p-4 shadow-sm">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-warning mt-3">Save Changes</button>
+</form>
+
+<br>
+<a href="{% url 'games:details' game.pk %}" class="btn btn-secondary">Back to Game Details</a>
+{% endblock %}

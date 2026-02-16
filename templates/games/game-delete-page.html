@@ -1,13 +1,14 @@
 {% extends 'shared/base.html' %}
+
 {% block content %}
 <div class="edit-delete">
-    <h2>Delete Team</h2>
+    <h2>Delete Game</h2>
 
     <form method="post">
         {{ form }}
         {% csrf_token %}
         <button class ="btn btn-danger btn-sm" type="submit">Delete</button>
         <a class="btn btn-warning btn-sm" href=javascript:history.back()>Go Back</a>
-</form>
+    </form>
 </div>
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<h2>Add Player Stats</h2>
+<p>{{ game.home_team.name }} vs {{ game.away_team.name }}</p>
+<form method="post" class="card p-4 shadow-sm">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success mt-3">Add Player Stats</button>
+</form>
+{% endblock %}

@@ -1,15 +1,12 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-
-<div class="edit-delete">
-    <h2>Edit Game</h2>
+<div class="card p-4 shadow-sm">
+    <h2>Edit Award</h2>
     <form method="post" class="card p-4 shadow-sm">
-
-        {% csrf_token %}
         {{ form }}
+        {% csrf_token %}
 
         <button type="submit" class="btn btn-warning mt-3">Save Changes</button>
-
-</form>
+    </form>
 </div>
 {% endblock %}

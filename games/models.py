@@ -11,21 +11,35 @@ class Game(models.Model):
     away_team = models.ForeignKey('teams.Team', on_delete=models.CASCADE, related_name='away_games')
     home_score = models.IntegerField()
     away_score = models.IntegerField()
-    players = models.ManyToManyField(Player)
+    players = models.ManyToManyField(Player, through='GamePlayerStats', related_name='games')
+
 
     def clean(self):
         if self.home_team == self.away_team:
             raise ValidationError("A team cannot play against itself.")
 
-        for player in self.players.all():
-            if player.team not in[self.home_team, self.away_team]:
-                raise ValidationError(f"Player {player} is not a member of either team.")
-
 
     def save(self, *args, **kwargs):
-        self.clean()
         super().save(*args, **kwargs)
 
 
     def __str__(self):
         return f"{self.home_team} vs {self.away_team} on {self.date}"
+
+class GamePlayerStats(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='player_stats')
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='game_stats')
+    points = models.PositiveIntegerField(default=0)
+    rebounds = models.PositiveIntegerField(default=0)
+    assists = models.PositiveIntegerField(default=0)
+
+
+    def clean(self):
+        if not self.game_id:
+            return
+        if self.player.team not in [self.game.home_team, self.game.away_team]:
+            raise ValidationError("Player doesnt belong to either team in this game.")
+
+
+    def __str__(self):
+        return f"{self.player} - {self.game}"

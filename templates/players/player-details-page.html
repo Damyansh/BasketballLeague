@@ -1,8 +1,28 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-<h2>Player Details</h2>
-<p>Name: Player Placeholder</p>
-<p>Position: Position Placeholder</p>
-<p>Team: Team Placeholder</p>
-<img src="#" alt="Player Photo" width="100">
+<h2>{{ player.first_name }} {{ player.last_name }}</h2>
+{% if player.photo %}
+    <img src="{{ player.photo.url }}" width="100">
+{% endif %}
+<p><strong>Team:</strong> {{ player.team.name }}</p>
+<p><strong>Position:</strong> {{ player.get_position_display }}</p>
+<p><strong>PPG:</strong> {{ player.points_per_game }}</p>
+<p><strong>RPG:</strong> {{ player.rebounds_per_game }}</p>
+<p><strong>APG:</strong> {{ player.assists_per_game }}</p>
+
+<h3>Awards</h3>
+   
+{% for award in awards %}
+    <p>{{ award.title }} - {{ award.get_title_display }} ({{ award.year }})
+        <a href="{% url 'common:award_edit' award.pk player.pk %}" class="btn btn-sm btn-warning ms-2">Edit</a>
+        <a href="{% url 'common:award_delete' award.pk player.pk %}" class="btn btn-sm btn-danger ms-2">Delete</a>
+    </p>
+{% empty %}
+    <p>No awards yet.</p>
+{% endfor %}
+
+
+<a class="btn btn-warning btn-sm" href="{% url 'players:edit' player.pk %}">Edit Player</a>
+<a class="btn btn-danger btn-sm" href="{% url 'players:delete' player.pk %}">Delete Player</a>
+<a class="btn btn-success btn-sm" href="{% url 'teams:details' player.team.pk %}">View Team</a>
 {% endblock %}

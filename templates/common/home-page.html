@@ -5,7 +5,7 @@
 <h2>Welcome to the Basketball League</h2>
 
 <h3>Teams</h3>
-<div class ="team-grid">
+<div class ="row row-cols-1 row-cols-md-3 g-4">
     {% for team in teams %}
     <div class="team-card">
         <a href="{% url 'teams:details' team.pk %}">
@@ -26,8 +26,9 @@
         {% if game.home_team.logo %}
             <img src="{{ game.home_team.logo.url }}" width="40">
         {% endif %}
-
-        {{ game.home_score }} : {{ game.away_score }}
+        <a href="{% url 'games:details' game.pk %}">
+            {{ game.home_score }} : {{ game.away_score }}
+        </a>
 
         {% if game.away_team.logo %}
             <img src="{{ game.away_team.logo.url }}" width="40">
@@ -38,6 +39,5 @@
         <div>{{ game.date }}
     </div>
     {% endfor %}
-
 </div>
 {% endblock %}

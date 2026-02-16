@@ -15,22 +15,31 @@
     
 <h3>Players</h3>
 
-{% for player in players%}
-    <div class="player-card">
-       {% if player.photo %}
-            <img src="{{ player.photo.url }}" alt="{{ player.first_name }} {{ player.last_name }}">
+{% for player in players %}
+    <div class="card mb-3 shadow-sm">
+     <div class="card-body d-flex align-items-center">    
+        {% if player.photo %}
+            <img src="{{ player.photo.url }}" alt="{{ player.first_name }} {{ player.last_name }}" class="rounded me-3" width="80">
         {% endif %}
         <div>
-            <strong>{{ player.first_name }} {{ player.last_name }}</strong><br>
+            <h5 class="card-title mb-1">
+                <a href="{% url 'players:details' player.pk %}" class="text-dark text-decoration-none">
+                    {{ player.first_name }} {{ player.last_name }}
+                </a>
+            </h5>
+            <p class="mb-0 text-muted">
             Position: {{ player.get_position_display }}<br>
             PPG: {{ player.points_per_game }},
             RPG: {{ player.rebounds_per_game }},
             APG: {{ player.assists_per_game }}
+            </p>
         </div>
+    </div>
     </div>
 {% empty %}
     <p>No players added yet.</p>
 {% endfor %}
 
-<a href="javascript:history.back()">Go Back</a>
+<a class="btn btn-warning btn-sm" href="{% url 'teams:edit' team.pk %}">Edit Team</a>
+<a class="btn btn-danger btn-sm" href="{% url 'teams:delete' team.pk %}">Delete Team</a>
 {% endblock %}

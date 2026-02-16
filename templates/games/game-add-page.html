@@ -1,13 +1,13 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-<h2>Add Game</h2>
-<form method="post">
+<div class="edit-delete">
+    <h2>Add Game</h2>
+<form method="post" class="card p-4 shadow-sm">
+
     {% csrf_token %}
-    <p>Team 1: <input type="text" name="team1" placeholder="Team 1"></p>
-    <p>Team 2: <input type="text" name="team2" placeholder="Team 2"></p>
-    <p>Date: <input type="date" name="date"></p>
-    <p>Score Team 1: <input type="number" name="score1"></p>
-    <p>Score Team 2: <input type="number" name="score2"></p>
-    <button type="submit">Add Game</button>
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary mt-3">Add Game</button>
+
 </form>
+</div>
 {% endblock %}

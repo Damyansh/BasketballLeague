@@ -1,13 +1,22 @@
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
+from teams.forms import TeamForm, TeamDeleteForm
 from teams.models import Team
 
 
 # Create your views here.
 
 def team_add(request: HttpRequest)-> HttpResponse:
-    return render(request, 'teams/team-add-page.html')
+    form = TeamForm(request.POST or None , request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect('common:home')
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'teams/team-add-page.html', context)
 
 def team_details(request: HttpRequest, pk:int)-> HttpResponse:
     team = get_object_or_404(Team, pk=pk)
@@ -19,7 +28,26 @@ def team_details(request: HttpRequest, pk:int)-> HttpResponse:
     return render(request, 'teams/team-details-page.html', context)
 
 def team_edit(request: HttpRequest, pk:int)-> HttpResponse:
-    return render(request, 'teams/team-edit-page.html')
+    team = get_object_or_404(Team, pk=pk)
+    form = TeamForm(request.POST or None, request.FILES or None, instance=team)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect('teams:details', pk=team.pk)
+
+    context = {
+        'form': form,
+        'team': team,
+    }
+    return render(request, 'teams/team-edit-page.html', context)
 
 def team_delete(request: HttpRequest, pk:int)-> HttpResponse:
-    return render(request, 'teams/team-delete-page.html')
+    team = get_object_or_404(Team, pk=pk)
+    form = TeamDeleteForm(request.POST or None, instance=team)
+    if request.method == "POST":
+        team.delete()
+        return redirect('common:home')
+    context = {
+        'form': form,
+        'team': team,
+    }
+    return render(request, 'teams/team-delete-page.html', context)
