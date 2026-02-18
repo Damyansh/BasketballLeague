@@ -62,7 +62,7 @@ def team_list(request: HttpRequest)-> HttpResponse:
     elif sort == 'city':
         teams= teams.order_by('city')
     elif sort == 'year':
-        teams= teams.order_by('year_founded')
+        teams= teams.order_by('-year_founded')
 
     context = {
         'teams': teams,
