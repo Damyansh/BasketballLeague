@@ -41,7 +41,18 @@ class GamePlayerStatsForm(forms.ModelForm):
         if game:
             used_players = GamePlayerStats.objects.filter(game=game).values_list('player_id', flat=True)
 
-            self.fields['player'].queryset = Player.objects.filter(team__in=[game.home_team, game.away_team]).exclude(id__in=used_players)
+            self.fields['player'].queryset = Player.objects.filter(team__in=[game.home_team, game.away_team]).exclude(id__in=used_players).order_by('first_name', 'last_name')
+
+
+class GamePlayerStatsEditForm(forms.ModelForm):
+    class Meta:
+        model = GamePlayerStats
+        fields = ['points', 'rebounds', 'assists']
+        widgets ={
+            'points': forms.NumberInput(attrs={'min': 0}),
+            'rebounds': forms.NumberInput(attrs={'min': 0}),
+            'assists': forms.NumberInput(attrs={'min': 0}),
+        }
 
 class GameDeleteForm(GameForm):
     def __init__(self, *args, **kwargs):

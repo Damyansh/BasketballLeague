@@ -30,4 +30,7 @@
 
 <a class ="btn btn-warning btn-sm" href="{% url 'games:edit' game.pk %}">Edit Game</a>
 <a class="btn btn-danger btn-sm" href="{% url 'games:delete' game.pk %}">Delete Game</a>
+
+<br>
+<a href="{% url 'common:home' %}" class="btn btn-secondary btn-sm mt-2">Back to Home</a>    
 {% endblock %}

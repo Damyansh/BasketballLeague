@@ -2,6 +2,7 @@
 {% block content %}
 <div class="edit-delete">
     <h2>Delete Player Stats</h2>
+    <p><strong>Player:</strong> {{ stat.player }}</p> 
     <form method="post">
         {{ form }}
         {% csrf_token %}

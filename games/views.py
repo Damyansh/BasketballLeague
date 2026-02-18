@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from games.forms import GameForm, GameDeleteForm, GamePlayerStatsForm
+from games.forms import GameForm, GameDeleteForm, GamePlayerStatsForm, GamePlayerStatsEditForm
 from games.models import Game, GamePlayerStats
 from players.models import Player
 from teams.models import Team
@@ -85,18 +85,16 @@ def game_edit_stats(request: HttpRequest, pk:int, stat_pk:int)-> HttpResponse:
     stat=get_object_or_404(GamePlayerStats, pk=stat_pk, game=game)
 
     if request.method == "POST":
-        form = GamePlayerStatsForm(request.POST, instance=stat)
+        form =GamePlayerStatsEditForm(request.POST, instance=stat)
         if form.is_valid():
-            updated_stat = form.save(commit=False)
-            updated_stat.game = game
-            updated_stat.full_clean()
-            updated_stat.save()
+            form.save()
+
             return redirect('games:details', pk=game.pk)
 
     else:
-        form = GamePlayerStatsForm(instance=stat)
+        form = GamePlayerStatsEditForm(instance=stat)
 
-        form.fields['player'].queryset = Player.objects.filter(team__in=[game.home_team, game.away_team])
+
 
     context = {
         'form': form,
