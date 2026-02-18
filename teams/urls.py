@@ -11,6 +11,7 @@ team_patterns = [
 ]
 
 urlpatterns = [
+    path('',views.team_list, name = 'list'),
     path('add/',views.team_add, name = 'add'),
     path('<int:pk>/',include(team_patterns))
 

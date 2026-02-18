@@ -1,0 +1,27 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <h2>Games</h2>
+    <form method="get" class="mb-3">
+        <select name="team" class="form-select mb-2">
+            <option value="">All Teams</option>
+            {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <input type="date" name="date" class="form-control mb-2">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+    <ul class="list-group">
+        {% for game in games %}
+            <li class="list-group-item">
+                <a href="{% url 'games:details' game.pk %}" class="text-dark">{{ game.home_team.name }} {{ game.home_score }} : {{ game.away_score }} {{ game.away_team.name }} ({{ game.date }})</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">No games found.</li>
+        {% endfor %}
+    </ul>
+</div>
+    
+{% endblock %}

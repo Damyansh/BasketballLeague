@@ -40,6 +40,9 @@ class GamePlayerStats(models.Model):
         if self.player.team not in [self.game.home_team, self.game.away_team]:
             raise ValidationError("Player doesnt belong to either team in this game.")
 
+    class Meta:
+        unique_together = ('game', 'player')
+
 
     def __str__(self):
         return f"{self.player} - {self.game}"

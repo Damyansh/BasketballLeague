@@ -1,9 +1,11 @@
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from games.forms import GameForm, GameDeleteForm, GamePlayerStatsForm
 from games.models import Game, GamePlayerStats
 from players.models import Player
+from teams.models import Team
 
 
 # Create your views here.
@@ -58,7 +60,7 @@ def game_delete(request: HttpRequest, pk:int)-> HttpResponse:
 def game_add_stats(request: HttpRequest, pk:int)-> HttpResponse:
     game = get_object_or_404(Game, pk=pk)
     if request.method == "POST":
-        form = GamePlayerStatsForm(request.POST)
+        form = GamePlayerStatsForm(request.POST,game=game)
         if form.is_valid():
             stat = form.save(commit=False)
             stat.game = game
@@ -67,9 +69,9 @@ def game_add_stats(request: HttpRequest, pk:int)-> HttpResponse:
             return redirect('games:details', pk=game.pk)
 
     else:
-        form = GamePlayerStatsForm()
+        form = GamePlayerStatsForm(game=game)
 
-        form.fields['player'].queryset = Player.objects.filter(team__in=[game.home_team, game.away_team])
+
 
     context = {
         'form': form,
@@ -117,3 +119,23 @@ def game_delete_stats(request: HttpRequest, pk:int, stat_pk:int)-> HttpResponse:
         'stat': stat,
     }
     return render(request, 'games/game-delete-stats-page.html', context)
+
+def game_list(request: HttpRequest)-> HttpResponse:
+    team_id = request.GET.get('team')
+    games = Game.objects.all()
+    date = request.GET.get('date')
+
+    if date:
+        games = games.filter(date=date)
+
+    if team_id:
+        games=games.filter(Q(home_team_id=team_id) | Q(away_team_id=team_id))
+
+    teams = Team.objects.all()
+
+    context = {
+        'games': games,
+        'teams': teams,
+    }
+
+    return render(request, 'games/game-list-page.html', context)

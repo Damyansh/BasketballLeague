@@ -1,6 +1,7 @@
 from django import forms
 
 from games.models import Game, GamePlayerStats
+from players.models import Player
 
 
 class GameForm(forms.ModelForm):
@@ -34,6 +35,13 @@ class GamePlayerStatsForm(forms.ModelForm):
             'assists': forms.NumberInput(attrs={'min': 0}),
         }
 
+    def __init__(self, *args,game=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if game:
+            used_players = GamePlayerStats.objects.filter(game=game).values_list('player_id', flat=True)
+
+            self.fields['player'].queryset = Player.objects.filter(team__in=[game.home_team, game.away_team]).exclude(id__in=used_players)
 
 class GameDeleteForm(GameForm):
     def __init__(self, *args, **kwargs):

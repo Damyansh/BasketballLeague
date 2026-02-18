@@ -1,0 +1,51 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <h2>Players</h2>
+
+    <form method="get" class="mb-3">
+        <select name="team" class="form-select mb-2">
+            <option value="">All Teams</option>
+            {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="sort" class="form-select mb-2">
+            <option value="">Sort By</option>
+            <option value="name">Name</option>
+            <option value="team">Team</option>
+            <option value="points">Points</option>
+            <option value="rebounds">Rebounds</option>
+            <option value="assists">Assists</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    <ul class="list-group">
+        {% for player in players %}
+            <li class="list-group-item">
+                <a href="{% url 'players:details' player.pk %}" class="text-dark">{{ player.first_name }} {{ player.last_name }} ({{ player.team.name }}) : {{ player.points_per_game }} PPG, {{ player.rebounds_per_game }} RPG, {{ player.assists_per_game }} APG </a>
+            </li>
+        {% empty %}    
+            <li class="list-group-item">No players found.</li>
+        {% endfor %}
+    </ul>
+    <div class="mt-3">
+        {% if players.has_previous %}
+        <a href="?team={{ request.GET.team }}&sort={{ request.GET.sort }}&page=1" class="btn btn-outline-secondary btn-sm text-dark">First</a>
+        <a href="?team={{ request.GET.team }}&sort={{ request.GET.sort }}&page={{ players.previous_page_number }}" class="btn btn-outline-secondary btn-sm text-dark">Previous</a>
+        {% endif %}
+
+        <span class="mx-2">
+            Page {{ players.number }} of {{ players.paginator.num_pages }}
+        </span>
+
+        {% if players.has_next %}
+        <a href="?team={{ request.GET.team }}&sort={{ request.GET.sort }}&page={{ players.next_page_number }}" class="btn btn-outline-secondary btn-sm text-dark">Next</a>
+        <a href="?team={{ request.GET.team }}&sort={{ request.GET.sort }}&page={{ players.paginator.num_pages }}" class="btn btn-outline-secondary btn-sm text-dark">Last</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

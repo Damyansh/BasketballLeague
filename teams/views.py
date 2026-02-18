@@ -20,7 +20,7 @@ def team_add(request: HttpRequest)-> HttpResponse:
 
 def team_details(request: HttpRequest, pk:int)-> HttpResponse:
     team = get_object_or_404(Team, pk=pk)
-    players = team.players.all()
+    players = team.players.all().order_by('first_name', 'last_name')
     context = {
         'team': team,
         'players': players,
@@ -51,3 +51,21 @@ def team_delete(request: HttpRequest, pk:int)-> HttpResponse:
         'team': team,
     }
     return render(request, 'teams/team-delete-page.html', context)
+
+def team_list(request: HttpRequest)-> HttpResponse:
+    sort = request.GET.get('sort')
+
+    teams = Team.objects.all()
+
+    if sort == 'name':
+        teams= teams.order_by('name')
+    elif sort == 'city':
+        teams= teams.order_by('city')
+    elif sort == 'year':
+        teams= teams.order_by('year_founded')
+
+    context = {
+        'teams': teams,
+    }
+
+    return render(request, 'teams/team-list-page.html', context)

@@ -1,0 +1,26 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <h2>Teams</h2>
+    <form method="get" class="mb-3">
+        <select name="sort" class="form-select mb-2">
+            <option value="">Sort By</option>
+            <option value="name">Name</option>
+            <option value="city">City</option>
+            <option value="year">Year Founded</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+    <ul class="list-group">
+        {% for team in teams %}
+            <li class="list-group-item">
+                <a href="{% url 'teams:details' team.pk %}" class="text-dark">{{ team.name }} (City: {{ team.city }}, Year Founded: {{ team.year_founded }})</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">No teams found.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+

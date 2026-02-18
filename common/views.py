@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -10,8 +11,16 @@ from teams.models import Team
 # Create your views here.
 
 def home_page(request: HttpRequest)-> HttpResponse:
-    teams = Team.objects.all()
-    games= Game.objects.all()
+    teams_list = Team.objects.all()
+    games_list= Game.objects.all().order_by('-date')
+
+    team_paginator = Paginator(teams_list, 6)
+    team_page_number = request.GET.get('team_page')
+    teams = team_paginator.get_page(team_page_number)
+
+    games_paginator = Paginator(games_list, 5)
+    games_page_number = request.GET.get('game_page')
+    games = games_paginator.get_page(games_page_number)
 
     context = {
         'teams': teams,

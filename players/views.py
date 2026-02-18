@@ -1,9 +1,11 @@
+from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from common.models import Award
 from players.forms import PlayerForm, PlayerDeleteForm
 from players.models import Player
+from teams.models import Team
 
 
 # Create your views here.
@@ -52,3 +54,38 @@ def player_details(request: HttpRequest, pk:int)-> HttpResponse:
     }
 
     return render(request, 'players/player-details-page.html', context)
+
+
+def player_list(request: HttpRequest)-> HttpResponse:
+    team_id = request.GET.get('team')
+    sort = request.GET.get('sort')
+
+    players = Player.objects.all()
+
+    if team_id:
+        players = players.filter(team_id=team_id)
+
+    if sort == 'name':
+        players= players.order_by('first_name', 'last_name')
+    elif sort == 'team':
+        players = players.order_by('team__name')
+    elif sort == 'points':
+        players = players.order_by('-points_per_game')
+    elif sort == 'rebounds':
+        players = players.order_by('-rebounds_per_game')
+    elif sort == 'assists':
+        players = players.order_by('-assists_per_game')
+
+    paginator = Paginator(players, 8)
+    page_number = request.GET.get('page')
+    players = paginator.get_page(page_number)
+
+
+    teams = Team.objects.all()
+
+    context = {
+        'players': players,
+        'teams': teams,
+    }
+
+    return render(request, 'players/player-list-page.html', context)

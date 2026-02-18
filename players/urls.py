@@ -10,6 +10,7 @@ player_patterns = [
     path('delete/',views.player_delete, name = 'delete'),
 ]
 urlpatterns = [
+    path('',views.player_list, name = 'list'),
     path('add/',views.player_add, name = 'add'),
     path('<int:pk>/',include(player_patterns))
 
