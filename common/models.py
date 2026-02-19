@@ -18,6 +18,9 @@ class Award(models.Model):
     year = models.PositiveIntegerField()
     players= models.ManyToManyField(Player)
 
+    class Meta:
+        unique_together = ('title', 'year')
+
 
     def __str__(self):
         return f"{self.title} ({self.year})"

@@ -131,6 +131,8 @@ def game_list(request: HttpRequest)-> HttpResponse:
 
     teams = Team.objects.all()
 
+    games=games.order_by('-date')
+
     context = {
         'games': games,
         'teams': teams,
