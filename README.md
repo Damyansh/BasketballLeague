@@ -1,4 +1,6 @@
 🏀 BasketballLeague – Django Web Application
+
+
 📌 Project Description
 BasketballLeague is a Django-based web application for managing basketball teams, players, games, statistics, and awards.
 The system allows:
