@@ -71,15 +71,30 @@ ________________________________________
 3️⃣ Install dependencies
 pip install -r requirements.txt
 ________________________________________
-4️⃣ Apply migrations
+4️⃣ Set up settings.py Database with this
+credentials:
+SECRET_KEY=django-insecure-ef_*a=semng1imhq_-oos4psfn079g(_)((eiu0ealm8#dabpf
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "basketball_league",
+        "USER": "postgres",
+        "PASSWORD": "damyansh12",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+    }
+}
+________________________________________
+5️⃣ Apply migrations
 python manage.py migrate
 ________________________________________
-5️⃣ Run the development server
+6️⃣ Run the development server
 python manage.py runserver
 Open in browser:
 http://127.0.0.1:8000/
 ________________________________________
-6️⃣ Create Superuser
+7️⃣ Create Superuser
 python manage.py createsuperuser
 ________________________________________
 🌍 Database Configuration
@@ -213,8 +228,6 @@ The project is fully:
 •	Downloadable
 
 •	Installable
-
-•	Runnable without modifications
 
 •	Database-ready (SQLite by default)
 
