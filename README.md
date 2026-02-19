@@ -54,6 +54,7 @@ sqlparse==0.5.5
 tzdata==2025.3
 ________________________________________
 🚀 Installation & Setup
+
 1️⃣ Clone the repository
 git clone https://github.com/Damyansh/BasketballLeague.git
 cd BasketballLeague
