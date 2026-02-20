@@ -73,7 +73,8 @@ pip install -r requirements.txt
 ________________________________________
 4️⃣ Set up settings.py Database with this
 credentials:
-SECRET_KEY=django-insecure-ef_*a=semng1imhq_-oos4psfn079g(_)((eiu0ealm8#dabpf
+SECRET_KEY="django-insecure-ef_*a=semng1imhq_-oos4psfn079g(_)((eiu0ealm8#dabpf"
+
 
 DATABASES = {
     "default": {
@@ -87,6 +88,7 @@ DATABASES = {
 }
 ________________________________________
 5️⃣ Apply migrations
+python manage.py makemigrations
 python manage.py migrate
 ________________________________________
 6️⃣ Run the development server
