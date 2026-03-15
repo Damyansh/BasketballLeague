@@ -1,6 +1,8 @@
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy, reverse
+from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView
 
 from common.forms import AwardForm, AwardUpdateForm
 from common.models import Award
@@ -10,67 +12,56 @@ from teams.models import Team
 
 # Create your views here.
 
-def home_page(request: HttpRequest)-> HttpResponse:
-    teams_list = Team.objects.all()
-    games_list= Game.objects.all().order_by('-date')
-
-    team_paginator = Paginator(teams_list, 6)
-    team_page_number = request.GET.get('team_page')
-    teams = team_paginator.get_page(team_page_number)
-
-    games_paginator = Paginator(games_list, 5)
-    games_page_number = request.GET.get('game_page')
-    games = games_paginator.get_page(games_page_number)
-
-    context = {
-        'teams': teams,
-        'games': games
-    }
-    return render(request, 'common/home-page.html', context)
-
-def award_add(request: HttpRequest)-> HttpResponse:
-    if request.method == "POST":
-        form = AwardForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('common:home')
-    else:
-        form = AwardForm()
-
-    context = {
-        'form': form
-        }
-
-    return render(request, 'common/award_add.html', context)
 
 
-def award_edit(request: HttpRequest, pk:int, player_id)-> HttpResponse:
-    award = get_object_or_404(Award, pk=pk)
+class HomePageView(TemplateView):
+    template_name = 'common/home-page.html'
 
-    if request.method == "POST":
-        form = AwardUpdateForm(request.POST, instance=award)
-        if form.is_valid():
-            form.save()
-            return redirect('players:details', pk=player_id)
-    else:
-        form = AwardUpdateForm(instance=award)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    context = {
-        'form': form
-        }
+        teams_list = Team.objects.all()
+        games_list= Game.objects.all().order_by('-date')
 
-    return render(request, 'common/award_edit.html', context)
+        team_paginator = Paginator(teams_list, 6)
+        team_page_number = self.request.GET.get('team_page')
+        teams = team_paginator.get_page(team_page_number)
+
+        games_paginator = Paginator(games_list, 5)
+        games_page_number = self.request.GET.get('game_page')
+        games = games_paginator.get_page(games_page_number)
+
+        context['teams'] = teams
+        context['games'] = games
+
+        return context
 
 
-def award_delete(request: HttpRequest, pk:int, player_id)-> HttpResponse:
-    award = get_object_or_404(Award, pk=pk)
+class AwardCreateView(CreateView):
+    model = Award
+    form_class = AwardForm
+    template_name = 'common/award_add.html'
+    success_url = reverse_lazy('common:home')
 
-    if request.method == "POST":
-        award.delete()
-        return redirect('players:details', pk=player_id)
 
-    context = {
-        'award': award
-        }
 
-    return render(request, 'common/award_delete.html', context)
+
+class AwardUpdateView(UpdateView):
+    model = Award
+    form_class = AwardUpdateForm
+    template_name = 'common/award_edit.html'
+
+    def get_success_url(self):
+        player_id = self.kwargs.get('player_id')
+        return reverse('players:details', kwargs={'pk': player_id})
+
+
+
+
+class AwardDeleteView(DeleteView):
+    model = Award
+    template_name = 'common/award_delete.html'
+
+    def get_success_url(self):
+        player_id = self.kwargs.get('player_id')
+        return reverse('players:details', kwargs={'pk': player_id})

@@ -1,17 +1,18 @@
 from django.urls import path, include
 
 from players import views
+from players.views import PlayerListView, PlayerCreateView, PlayerDetailView, PlayerUpdateView, PlayerDeleteView
 
 app_name = 'players'
 
 player_patterns = [
-    path('',views.player_details, name = 'details'),
-    path('edit/',views.player_edit, name = 'edit'),
-    path('delete/',views.player_delete, name = 'delete'),
+    path('',PlayerDetailView.as_view(), name = 'details'),
+    path('edit/',PlayerUpdateView.as_view(), name = 'edit'),
+    path('delete/',PlayerDeleteView.as_view(), name = 'delete'),
 ]
 urlpatterns = [
-    path('',views.player_list, name = 'list'),
-    path('add/',views.player_add, name = 'add'),
+    path('',PlayerListView.as_view(), name = 'list'),
+    path('add/',PlayerCreateView.as_view(), name = 'add'),
     path('<int:pk>/',include(player_patterns))
 
 ]

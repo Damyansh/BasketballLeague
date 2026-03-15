@@ -1,141 +1,152 @@
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, FormView
 
 from games.forms import GameForm, GameDeleteForm, GamePlayerStatsForm, GamePlayerStatsEditForm
 from games.models import Game, GamePlayerStats
-from players.models import Player
 from teams.models import Team
 
 
 # Create your views here.
 
 
-def game_add(request: HttpRequest)-> HttpResponse:
-    form = GameForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return redirect('common:home')
-    context = {
-        'form': form,
-    }
-    return render(request, 'games/game-add-page.html', context)
 
-def game_edit(request: HttpRequest, pk:int)-> HttpResponse:
-    game = get_object_or_404(Game, pk=pk)
-    form = GameForm(request.POST or None, instance=game)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return redirect('games:details', pk=game.pk)
-    context = {
-        'form': form,
-        'game': game,
-    }
-    return render(request, 'games/game-edit-page.html', context)
-
-def game_details(request: HttpRequest, pk:int)-> HttpResponse:
-    game = get_object_or_404(Game, pk=pk)
-    stats = game.player_stats.select_related('player', 'player__team')
-    context = {
-        'game': game,
-        'stats': stats,
-    }
-    return render(request, 'games/game-details-page.html', context)
-
-
-def game_delete(request: HttpRequest, pk:int)-> HttpResponse:
-    game = get_object_or_404(Game, pk=pk)
-    form=GameDeleteForm(request.POST or None, instance=game)
-
-    if request.method == "POST":
-        game.delete()
-        return redirect('common:home')
-    context = {
-        'form': form,
-        'game': game,
-    }
-    return render(request, 'games/game-delete-page.html', context)
-
-
-def game_add_stats(request: HttpRequest, pk:int)-> HttpResponse:
-    game = get_object_or_404(Game, pk=pk)
-    if request.method == "POST":
-        form = GamePlayerStatsForm(request.POST,game=game)
-        if form.is_valid():
-            stat = form.save(commit=False)
-            stat.game = game
-            stat.full_clean()
-            stat.save()
-            return redirect('games:details', pk=game.pk)
-
-    else:
-        form = GamePlayerStatsForm(game=game)
+class GameCreateView(CreateView):
+    model = Game
+    form_class = GameForm
+    template_name = 'games/game-add-page.html'
+    success_url = reverse_lazy('common:home')
 
 
 
-    context = {
-        'form': form,
-        'game': game,
-    }
-    return render(request, 'games/game-add-stats-page.html', context)
+class GameUpdateView(UpdateView):
+    model = Game
+    form_class = GameForm
+    template_name = 'games/game-edit-page.html'
+    context_object_name = 'game'
+
+    def get_success_url(self):
+        return reverse('games:details', kwargs={'pk': self.object.pk})
 
 
-def game_edit_stats(request: HttpRequest, pk:int, stat_pk:int)-> HttpResponse:
-    game = get_object_or_404(Game, pk=pk)
-    stat=get_object_or_404(GamePlayerStats, pk=stat_pk, game=game)
+class GameDetailView(DetailView):
+    model = Game
+    template_name = 'games/game-details-page.html'
+    context_object_name = 'game'
 
-    if request.method == "POST":
-        form =GamePlayerStatsEditForm(request.POST, instance=stat)
-        if form.is_valid():
-            form.save()
-
-            return redirect('games:details', pk=game.pk)
-
-    else:
-        form = GamePlayerStatsEditForm(instance=stat)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stats'] = self.object.player_stats.select_related('player', 'player__team')
+        return context
 
 
 
-    context = {
-        'form': form,
-        'game': game,
-        'stat': stat,
-    }
-    return render(request, 'games/game-edit-stats-page.html', context)
 
 
-def game_delete_stats(request: HttpRequest, pk:int, stat_pk:int)-> HttpResponse:
-    game = get_object_or_404(Game, pk=pk)
-    stat=get_object_or_404(GamePlayerStats, pk=stat_pk, game=game)
+class GameDeleteView(DeleteView):
+    model = Game
+    template_name = 'games/game-delete-page.html'
+    context_object_name = 'game'
+    success_url = reverse_lazy('common:home')
 
-    if request.method == "POST":
-        stat.delete()
-        return redirect('games:details', pk=game.pk)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form']=GameDeleteForm(instance=self.object)
+        return context
 
-    context = {
-        'game': game,
-        'stat': stat,
-    }
-    return render(request, 'games/game-delete-stats-page.html', context)
 
-def game_list(request: HttpRequest)-> HttpResponse:
-    team_id = request.GET.get('team')
-    games = Game.objects.all()
-    date = request.GET.get('date')
 
-    if date:
-        games = games.filter(date=date)
 
-    if team_id:
-        games=games.filter(Q(home_team_id=team_id) | Q(away_team_id=team_id))
+class GameAddStatsView(FormView):
+    template_name = 'games/game-add-stats-page.html'
+    form_class = GamePlayerStatsForm
 
-    teams = Team.objects.all()
+    def dispatch(self, request, *args, **kwargs):
+        self.game = Game.objects.get(pk=self.kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
 
-    games=games.order_by('-date')
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['game'] = self.game
+        return kwargs
 
-    context = {
-        'games': games,
-        'teams': teams,
-    }
+    def form_valid(self, form):
+        stat = form.save(commit=False)
+        stat.game = self.game
+        stat.full_clean()
+        stat.save()
+        return super().form_valid(form)
 
-    return render(request, 'games/game-list-page.html', context)
+    def get_success_url(self):
+        return reverse('games:details', kwargs={'pk': self.game.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['game'] = self.game
+        return context
+
+
+
+
+class GameEditStatsView(UpdateView):
+    model = GamePlayerStats
+    form_class = GamePlayerStatsEditForm
+    template_name = 'games/game-edit-stats-page.html'
+    context_object_name = 'stat'
+    pk_url_kwarg = 'stat_pk'
+
+    def get_success_url(self):
+        return reverse('games:details', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['game'] = Game.objects.get(pk=self.kwargs['pk'])
+        return context
+
+
+
+
+
+
+class GameDeleteStatsView(DeleteView):
+    model = GamePlayerStats
+    template_name = 'games/game-delete-stats-page.html'
+    pk_url_kwarg = 'stat_pk'
+    context_object_name = 'stat'
+
+    def get_success_url(self):
+        return reverse('games:details', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['game'] = Game.objects.get(pk=self.kwargs['pk'])
+        return context
+
+
+
+class GameListView(ListView):
+    model = Game
+    template_name = 'games/game-list-page.html'
+    context_object_name = 'games'
+    paginate_by = 5
+
+    def get_queryset(self):
+        qs= Game.objects.all()
+        team_id = self.request.GET.get('team')
+        date = self.request.GET.get('date')
+
+        if date:
+            qs = qs.filter(date=date)
+
+        if team_id:
+            qs = qs.filter(Q(home_team_id=team_id) | Q(away_team_id=team_id))
+
+        return qs.order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['teams'] = Team.objects.all()
+        context['games'] = context['page_obj']
+
+        return context

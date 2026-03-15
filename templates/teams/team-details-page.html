@@ -11,7 +11,7 @@
     
 
 <p><strong>City:</strong> {{ team.city }}</p>
-<p><strong>Year Founded:</strong> {{ team.year_founded }}</p>
+<p><strong>Year Founded:</strong> {{ team.year_founded|default:"Unknown" }}</p>
 <p><strong>Coach:</strong> {{ team.coach_name }}</p>
 <p><strong>Total Players:</strong> {{ team|player_count }}</p>
     
