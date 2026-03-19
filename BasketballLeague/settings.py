@@ -40,6 +40,7 @@ PROJECT_APPS = [
     'teams',
     'players',
     'games',
+    'accounts',
 ]
 
 INSTALLED_APPS = [
@@ -139,7 +140,9 @@ STATICFILES_DIRS = [
 ]
 
 
-
+LOGIN_URL='accounts:login'
+LOGIN_REDIRECT_URL='common:home'
+LOGOUT_REDIRECT_URL='common:home'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
@@ -149,3 +152,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+

@@ -1,0 +1,16 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+
+<h2>Profile</h2>
+<p><strong>Username:</strong> {{ profile.user.username }}</p>
+<p><strong>Email:</strong> {{ profile.user.email }}</p>
+<p><strong>Favorite Team:</strong> {{ profile.favourite_team }}</p>
+<p><strong>Bio:</strong> {{ profile.bio }}</p>
+
+{% if profile.profile_picture %}
+    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" width="150">
+{% endif %}
+
+<a href="{% url 'accounts:profile-edit' %}" class="btn btn-warning btn-sm">Edit Profile</a>
+<a href="{% url 'accounts:profile-delete' %}" class="btn btn-danger btn-sm">Delete Profile</a>
+{% endblock %}

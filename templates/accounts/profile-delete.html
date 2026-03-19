@@ -1,0 +1,10 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+
+<h2>Are you sure?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger">Delete profile</button>
+</form>
+
+{% endblock %}
