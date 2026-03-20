@@ -14,23 +14,23 @@
         Assists: {{ stat.assists }}
 
      <br><br>
-
+        {% if user.is_staff %}
         <a class="btn btn-warning btn-sm ms-4" href="{% url 'games:edit-stats' game.pk stat.pk %}">Edit</a>
         <a class="btn btn-danger btn-sm ms-3" href="{% url 'games:delete-stats' game.pk stat.pk %}">Delete</a>
-
+        {% endif %}
     </div>
 {% empty %}
     <p>No player statistics added yet.</p>
 {% endfor %}
-
+{% if user.is_staff %}
 <a class="btn btn-success btn-sm" href="{% url 'games:add-stats' game.pk %}">Add Player Stats</a>
-
+{% endif %}
 <br><br>
 
-
+{% if user.is_staff %}
 <a class ="btn btn-warning btn-sm" href="{% url 'games:edit' game.pk %}">Edit Game</a>
 <a class="btn btn-danger btn-sm" href="{% url 'games:delete' game.pk %}">Delete Game</a>
-
+{% endif %}
 <br>
 <a href="{% url 'common:home' %}" class="btn btn-secondary btn-sm mt-2">Back to Home</a>    
 {% endblock %}

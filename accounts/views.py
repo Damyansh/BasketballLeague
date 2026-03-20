@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
@@ -14,6 +14,14 @@ class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = 'accounts/register.html'
     success_url = reverse_lazy('accounts:login')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        fan_group=Group.objects.get(name='Fan')
+        self.object.groups.add(fan_group)
+
+        return response
 
 class CustomLoginView(LoginView):
     template_name = 'accounts/login.html'

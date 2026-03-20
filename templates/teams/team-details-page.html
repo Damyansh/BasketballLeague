@@ -41,7 +41,8 @@
 {% empty %}
     <p>No players added yet.</p>
 {% endfor %}
-
+{% if user.is_staff %}
 <a class="btn btn-warning btn-sm" href="{% url 'teams:edit' team.pk %}">Edit Team</a>
 <a class="btn btn-danger btn-sm" href="{% url 'teams:delete' team.pk %}">Delete Team</a>
+{% endif %}
 {% endblock %}

@@ -24,17 +24,69 @@ body{
 .navbar a:hover{
     color: #f1c40f;
 }
+
 .nav-left{
     justify-self: start;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    overflow: hidden;
 }
 
-.navbar img{
-    width: 90%;
-    margin : auto;
+.nav-left form{
+    margin: 0;
 }
+
+.nav-left button{
+    background-color: #f1c40f;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.nav-left a{
+    margin-right: 10px;
+}
+
+
+
+
+
+.player-card{
+    display: flex;
+    align-items: center;
+    background: #1b263b;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+
+.player-card img{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #f1c40f;
+}
+
+.team-card a{
+    color: white;
+    font-weight: 600;
+}
+
+
 
 .nav-center img{
-    height: 180px;
+    height: 80px;
     width: auto;
 }
 .nav-center{
@@ -72,33 +124,42 @@ body{
     border-radius: 10px;
 }
 
-.player-card{
+.navbar .avatar {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f1c40f;
+    display: block;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+.user-info {
     display: flex;
     align-items: center;
-    background: #1b263b;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    gap: 10px;
 }
 
+.user-info img {
+    width: 40px !important;
+    height: 40px !important;
+    flex-shrink: 0;
+}
 
-.player-card img{
-    width: 70px;
-    height: 70px;
+.profile-pic {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    margin-right: 15px;
+    object-fit: cover;
+    border: 3px solid #f1c40f;
 }
 
-a{
-    color: white;
-    text-decoration: none;
-}
-
-a:hover{
-    color: #f1c40f;
-}
-
-.team-card a{
-    color: white;
-    font-weight: 600;
-}

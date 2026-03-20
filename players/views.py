@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -10,16 +11,17 @@ from teams.models import Team
 # Create your views here.
 
 
-class PlayerCreateView(CreateView):
+class PlayerCreateView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     model = Player
     form_class = PlayerForm
     template_name = 'players/player-add-page.html'
     success_url = reverse_lazy('common:home')
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
-
-class PlayerUpdateView(UpdateView):
+class PlayerUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Player
     form_class = PlayerForm
     template_name = 'players/player-edit-page.html'
@@ -29,8 +31,9 @@ class PlayerUpdateView(UpdateView):
         return reverse_lazy('players:details', kwargs={'pk': self.object.pk})
 
 
-
-class PlayerDeleteView(DeleteView):
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
+class PlayerDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Player
     template_name = 'players/player-delete-page.html'
     context_object_name = 'player'
@@ -41,7 +44,8 @@ class PlayerDeleteView(DeleteView):
         context['form'] = PlayerDeleteForm(instance=self.object)
         return context
 
-
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 class PlayerDetailView(DetailView):
     model = Player
     template_name = 'players/player-details-page.html'

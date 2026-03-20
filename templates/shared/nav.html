@@ -3,13 +3,20 @@
 <nav class="navbar">
     <div class = "nav-left">
     <a href="{% url 'common:home' %}">Home</a>
-    </div>
 
-    <div class = "nav-center">
-        <img src="{% static 'images/site/logo.png' %}" alt="logo">
+    <div class ="user-info">
+        {% if user.is_authenticated %}
+            <span style="margin-right: 10px;">Welcome, {{ user.username }}</span>
+            {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" class ="avatar">
+            {% else %}
+             <img src="/media/defaults/profile.png" class ="avatar">
+            {% endif %}
+            {% else %}
+            <span style="margin-right: 10px;">Welcome, Guest</span>
+            <img src="/media/defaults/profile.png" class ="avatar">
+        {% endif %}
     </div>
-
-    <div class = "nav-right">
         {% if user.is_authenticated %}
             <a href="{% url 'accounts:profile' %}">Profile</a>
             <a href="{% url 'accounts:change-password' %}">Change Password</a>
@@ -21,11 +28,22 @@
             <a href="{% url 'accounts:register' %}">Register</a>
             <a href="{% url 'accounts:login' %}">Login</a>
         {% endif %}
+    </div>
 
+    <div class = "nav-center">
+        <img src="{% static 'images/site/logo.png' %}" alt="logo">
+    </div>
+
+    <div class = "nav-right">
+
+
+        {% if user.is_staff %}
         <a class="add-btn" href="{% url 'common:award_add' %}">Add Award</a>
         <a href="{% url 'teams:add' %}">Add Team</a>
         <a href="{% url 'players:add' %}">Add Player</a>
         <a href="{% url 'games:add' %}">Add Game</a>
+        {% endif %}
+
         <a href="{% url 'players:list' %}">Players</a>
         <a href="{% url 'teams:list' %}">Teams</a>
         <a href="{% url 'games:list' %}">Games</a>

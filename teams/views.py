@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -8,11 +9,14 @@ from teams.models import Team
 # Create your views here.
 
 
-class TeamCreateView(CreateView):
+class TeamCreateView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     model = Team
     form_class = TeamForm
     template_name = 'teams/team-add-page.html'
     success_url = reverse_lazy('common:home')
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
 
@@ -28,7 +32,7 @@ class TeamDetailView(DetailView):
 
 
 
-class TeamUpdateView(UpdateView):
+class TeamUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Team
     form_class = TeamForm
     template_name = 'teams/team-edit-page.html'
@@ -37,9 +41,11 @@ class TeamUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('teams:details', kwargs={'pk': self.object.pk})
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
-class TeamDeleteView(DeleteView):
+class TeamDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Team
     template_name = 'teams/team-delete-page.html'
     context_object_name = 'team'
@@ -49,6 +55,9 @@ class TeamDeleteView(DeleteView):
         context = super().get_context_data(**kwargs)
         context['form'] = TeamDeleteForm(instance=self.object)
         return context
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
 class TeamListView(ListView):

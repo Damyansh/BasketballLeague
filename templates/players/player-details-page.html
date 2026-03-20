@@ -14,15 +14,18 @@
    
 {% for award in awards %}
     <p>{{ award.title }} - {{ award.get_title_display }} ({{ award.year }})
+        {% if user.is_staff %}
         <a href="{% url 'common:award_edit' award.pk player.pk %}" class="btn btn-sm btn-warning ms-2">Edit</a>
         <a href="{% url 'common:award_delete' award.pk player.pk %}" class="btn btn-sm btn-danger ms-2">Delete</a>
+        {% endif %}
     </p>
 {% empty %}
     <p>No awards yet.</p>
 {% endfor %}
 
-
+{% if user.is_staff %}
 <a class="btn btn-warning btn-sm" href="{% url 'players:edit' player.pk %}">Edit Player</a>
 <a class="btn btn-danger btn-sm" href="{% url 'players:delete' player.pk %}">Delete Player</a>
+{% endif %}
 <a class="btn btn-success btn-sm" href="{% url 'teams:details' player.team.pk %}">View Team</a>
 {% endblock %}

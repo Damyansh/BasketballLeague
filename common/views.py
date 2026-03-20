@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -37,16 +38,19 @@ class HomePageView(TemplateView):
         return context
 
 
-class AwardCreateView(CreateView):
+class AwardCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Award
     form_class = AwardForm
     template_name = 'common/award_add.html'
     success_url = reverse_lazy('common:home')
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
 
-class AwardUpdateView(UpdateView):
+
+class AwardUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Award
     form_class = AwardUpdateForm
     template_name = 'common/award_edit.html'
@@ -55,13 +59,17 @@ class AwardUpdateView(UpdateView):
         player_id = self.kwargs.get('player_id')
         return reverse('players:details', kwargs={'pk': player_id})
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
-
-class AwardDeleteView(DeleteView):
+class AwardDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Award
     template_name = 'common/award_delete.html'
 
     def get_success_url(self):
         player_id = self.kwargs.get('player_id')
         return reverse('players:details', kwargs={'pk': player_id})
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()

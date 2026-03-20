@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.db.models import Q
 
 from django.urls import reverse_lazy, reverse
@@ -12,15 +13,16 @@ from teams.models import Team
 
 
 
-class GameCreateView(CreateView):
+class GameCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Game
     form_class = GameForm
     template_name = 'games/game-add-page.html'
     success_url = reverse_lazy('common:home')
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
-
-class GameUpdateView(UpdateView):
+class GameUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Game
     form_class = GameForm
     template_name = 'games/game-edit-page.html'
@@ -28,7 +30,8 @@ class GameUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('games:details', kwargs={'pk': self.object.pk})
-
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 class GameDetailView(DetailView):
     model = Game
@@ -44,7 +47,7 @@ class GameDetailView(DetailView):
 
 
 
-class GameDeleteView(DeleteView):
+class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Game
     template_name = 'games/game-delete-page.html'
     context_object_name = 'game'
@@ -55,10 +58,11 @@ class GameDeleteView(DeleteView):
         context['form']=GameDeleteForm(instance=self.object)
         return context
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
-
-class GameAddStatsView(FormView):
+class GameAddStatsView(LoginRequiredMixin, UserPassesTestMixin, FormView):
     template_name = 'games/game-add-stats-page.html'
     form_class = GamePlayerStatsForm
 
@@ -87,9 +91,10 @@ class GameAddStatsView(FormView):
         return context
 
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
-
-class GameEditStatsView(UpdateView):
+class GameEditStatsView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = GamePlayerStats
     form_class = GamePlayerStatsEditForm
     template_name = 'games/game-edit-stats-page.html'
@@ -104,12 +109,15 @@ class GameEditStatsView(UpdateView):
         context['game'] = Game.objects.get(pk=self.kwargs['pk'])
         return context
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
 
 
 
-class GameDeleteStatsView(DeleteView):
+
+class GameDeleteStatsView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = GamePlayerStats
     template_name = 'games/game-delete-stats-page.html'
     pk_url_kwarg = 'stat_pk'
@@ -122,6 +130,8 @@ class GameDeleteStatsView(DeleteView):
         context = super().get_context_data(**kwargs)
         context['game'] = Game.objects.get(pk=self.kwargs['pk'])
         return context
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
 
