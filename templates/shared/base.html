@@ -27,5 +27,10 @@
     <span>© Basketball League</span>
 </footer>
 
+<div style="padding:10px; font-size:14px;">
+    <p>Visits: {{ request.session.visit_count }}</p>
+    <p>Last page: {{ request.session.last_page }}</p>
+</div>
+
 </body>
 </html>
