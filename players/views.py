@@ -1,10 +1,13 @@
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from rest_framework.viewsets import ModelViewSet
 
 from common.models import Award
+from common.permissions import IsAdminOrReadOnly
 from players.forms import PlayerForm, PlayerDeleteForm
 from players.models import Player
+from players.serializers import PlayerSerializer
 from teams.models import Team
 
 
@@ -92,3 +95,8 @@ class PlayerListView(ListView):
         context['teams'] = Team.objects.all()
         context['players'] =context['page_obj']
         return context
+
+class PlayerViewSet(ModelViewSet):
+    queryset = Player.objects.all()
+    serializer_class = PlayerSerializer
+    permission_classes = [IsAdminOrReadOnly]

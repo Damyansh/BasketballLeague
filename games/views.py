@@ -3,9 +3,12 @@ from django.db.models import Q
 
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, FormView
+from rest_framework.viewsets import ModelViewSet
 
+from common.permissions import IsAdminOrReadOnly
 from games.forms import GameForm, GameDeleteForm, GamePlayerStatsForm, GamePlayerStatsEditForm
 from games.models import Game, GamePlayerStats
+from games.serializers import GameSerializer
 from teams.models import Team
 
 
@@ -160,3 +163,9 @@ class GameListView(ListView):
         context['games'] = context['page_obj']
 
         return context
+
+
+class GameViewSet(ModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    permission_classes = [IsAdminOrReadOnly]

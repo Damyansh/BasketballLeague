@@ -1,9 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from rest_framework.viewsets import ModelViewSet
 
+from common.permissions import IsAdminOrReadOnly
 from teams.forms import TeamForm, TeamDeleteForm
 from teams.models import Team
+from teams.serializers import TeamSerializer
 
 
 # Create your views here.
@@ -81,3 +84,8 @@ class TeamListView(ListView):
         context = super().get_context_data(**kwargs)
         context['teams'] = context['page_obj']
         return context
+
+class TeamViewSet(ModelViewSet):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+    permission_classes = [IsAdminOrReadOnly]
