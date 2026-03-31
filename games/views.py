@@ -10,6 +10,7 @@ from games.forms import GameForm, GameDeleteForm, GamePlayerStatsForm, GamePlaye
 from games.models import Game, GamePlayerStats
 from games.serializers import GameSerializer
 from teams.models import Team
+from games.tasks import notify_new_game
 
 
 # Create your views here.
@@ -24,6 +25,17 @@ class GameCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
         return self.request.user.groups.filter(name='Admin').exists()
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        notify_new_game.delay(
+            self.object.home_team.name,
+            self.object.away_team.name
+        )
+
+
+        return response
 
 class GameUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Game

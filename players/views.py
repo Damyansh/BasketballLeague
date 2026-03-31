@@ -8,6 +8,7 @@ from common.permissions import IsAdminOrReadOnly
 from players.forms import PlayerForm, PlayerDeleteForm
 from players.models import Player
 from players.serializers import PlayerSerializer
+from players.tasks import notify_new_player
 from teams.models import Team
 
 
@@ -22,6 +23,13 @@ class PlayerCreateView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
 
     def test_func(self):
         return self.request.user.groups.filter(name='Admin').exists()
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        notify_new_player.delay(f"{self.object.first_name} {self.object.last_name}")
+
+        return response
 
 
 class PlayerUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
