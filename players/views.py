@@ -80,7 +80,7 @@ class PlayerListView(ListView):
         team_id = self.request.GET.get('team')
         sort = self.request.GET.get('sort')
 
-        qs = Player.objects.all()
+        qs = Player.objects.all().order_by('id')
 
         if team_id:
             qs = qs.filter(team_id=team_id)
