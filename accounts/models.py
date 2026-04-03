@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -10,7 +11,7 @@ class Profile(models.Model):
     favourite_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True)
     bio = models.TextField(blank=True)
 
-    profile_picture = models.ImageField(upload_to='profiles/',default='defaults/profile.png', null=True, blank=True)
+    profile_picture = CloudinaryField('image', null=True, blank=True)
 
 
     def __str__(self):

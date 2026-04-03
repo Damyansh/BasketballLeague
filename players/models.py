@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.db import models
 
 # Create your models here.
@@ -16,7 +17,7 @@ class Player(models.Model):
     points_per_game = models.FloatField()
     rebounds_per_game = models.FloatField()
     assists_per_game = models.FloatField()
-    photo =models.ImageField(upload_to='players/', default='defaults/player.png', blank=True)
+    photo =CloudinaryField('image', blank=True, null=True)
 
 
 

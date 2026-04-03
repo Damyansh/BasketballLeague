@@ -10,11 +10,11 @@
             {% if user.profile.profile_picture %}
             <img src="{{ user.profile.profile_picture.url }}" class ="avatar">
             {% else %}
-             <img src="/media/defaults/profile.png" class ="avatar">
+             <img src="{% static 'images/defaults/profile.png' %}" class ="avatar">
             {% endif %}
             {% else %}
             <span style="margin-right: 10px;">Welcome, Guest</span>
-            <img src="/media/defaults/profile.png" class ="avatar">
+            <img src="{% static 'images/defaults/profile.png' %}" class ="avatar">
         {% endif %}
     </div>
         {% if user.is_authenticated %}

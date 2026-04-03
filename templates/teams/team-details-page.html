@@ -7,6 +7,8 @@
     
 {% if team.logo %}
     <img src="{{ team.logo.url }}" alt={{ team.name }} width="100">
+    {% else %}
+    <img src="{% static 'images/defaults/team.png' %}" alt="{{ team.name }}">
 {% endif %}
     
 
@@ -22,6 +24,8 @@
      <div class="card-body d-flex align-items-center">    
         {% if player.photo %}
             <img src="{{ player.photo.url }}" alt="{{ player.first_name }} {{ player.last_name }}" class="rounded me-3" width="80">
+            {% else %}
+            <img src="{% static 'images/defaults/player.png' %}" alt="{{ player.first_name }} {{ player.last_name }}" class="rounded me-3" width="80">
         {% endif %}
         <div>
             <h5 class="card-title mb-1">

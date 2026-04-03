@@ -11,6 +11,8 @@
         <a href="{% url 'teams:details' team.pk %}">
             {% if team.logo %}
                 <img src="{{ team.logo.url }}" alt="{{ team.name }}">
+                {% else %}
+                <img src="{% static 'images/defaults/team.png' %}" alt="{{ team.name }}">
             {% endif %}
             <p>{{ team.name }}</p>
         </a>
@@ -38,6 +40,8 @@
         <strong>{{ game.home_team.name }}</strong>
         {% if game.home_team.logo %}
             <img src="{{ game.home_team.logo.url }}" width="40">
+            {% else %}
+            <img src="{% static 'images/defaults/team.png' %}" width="40">
         {% endif %}
         <a href="{% url 'games:details' game.pk %}">
             {{ game.home_score }} : {{ game.away_score }}
@@ -45,6 +49,8 @@
 
         {% if game.away_team.logo %}
             <img src="{{ game.away_team.logo.url }}" width="40">
+            {% else %}
+            <img src="{% static 'images/defaults/team.png' %}" width="40">
         {% endif %}
 
         <strong>{{ game.away_team.name }}</strong>

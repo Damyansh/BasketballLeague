@@ -1,8 +1,11 @@
 {% extends 'shared/base.html' %}
+{% load static %}
 {% block content %}
 <h2>{{ player.first_name }} {{ player.last_name }}</h2>
 {% if player.photo %}
     <img src="{{ player.photo.url }}" width="100">
+{% else %}
+    <img src="{% static 'images/defaults/player.png' %}" width="100">
 {% endif %}
 <p><strong>Team:</strong> {{ player.team.name }}</p>
 <p><strong>Position:</strong> {{ player.get_position_display }}</p>
