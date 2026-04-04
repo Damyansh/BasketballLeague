@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.db.models import Q
 
@@ -29,11 +30,16 @@ class GameCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
 
-        notify_new_game.delay(
-            self.object.home_team.name,
-            self.object.away_team.name
-        )
-
+        if settings.DEBUG:
+            notify_new_game.delay(
+                self.object.home_team.name,
+                self.object.away_team.name
+            )
+        else:
+            notify_new_game(
+                self.object.home_team.name,
+                self.object.away_team.name
+            )
 
         return response
 

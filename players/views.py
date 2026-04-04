@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -27,7 +28,10 @@ class PlayerCreateView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
 
-        notify_new_player.delay(f"{self.object.first_name} {self.object.last_name}")
+        if settings.DEBUG:
+            notify_new_player.delay(f"{self.object.first_name} {self.object.last_name}")
+        else:
+            notify_new_player(f"{self.object.first_name} {self.object.last_name}")
 
         return response
 
