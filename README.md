@@ -360,17 +360,14 @@ ________________________________________
 ## 📸 Screenshots
 
 Home Page  
-![Home Page](https://github.com/user-attachments/assets/7882af8d-00a4-4cd3-81b0-0a2dd531cc96)
 <img width="1897" height="906" alt="image" src="https://github.com/user-attachments/assets/dd5e73b1-7c35-4b55-b2f1-fb71357ddbf5" />
 
 
 
 Players List  
-![Players List](https://github.com/user-attachments/assets/9a1dde07-904f-4932-a801-57b1c0980aca)
 <img width="1897" height="932" alt="image" src="https://github.com/user-attachments/assets/92084c39-1b79-4283-b101-fdd6055945af" />
 
 
 Game Details  
-![Game Details](https://github.com/user-attachments/assets/8e61164b-9b37-4656-ab04-b980fe258099)
 <img width="1882" height="916" alt="image" src="https://github.com/user-attachments/assets/aa4b5c7e-856a-4857-99db-5b7425ac338e" />
 
