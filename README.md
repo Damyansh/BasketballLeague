@@ -1,4 +1,4 @@
-🏀 BasketballLeague – Django Advanced Web Application
+<img width="1897" height="906" alt="image" src="https://github.com/user-attachments/assets/a7f37ad7-16fc-47b4-b3e6-f2302ef91d4d" />🏀 BasketballLeague – Django Advanced Web Application
 
 📌 Project Description BasketballLeague is a full-stack Django application for managing basketball teams, players, games, awards, and player statistics.
 
@@ -228,21 +228,6 @@ Configured in Azure App Service (not included in repository for security reasons
 - CSRF_TRUSTED_ORIGINS
 Redis URL format:
 rediss://:PASSWORD@HOST:6380/0?ssl_cert_reqs=none
-________________________________________
-⚠️ Important Azure Setup Steps
-
-After deployment:
-
-python manage.py createsuperuser
-
-Then in Admin panel:
-
-Create groups:
-Admin
-Fan
-Assign:
-is_staff=True
-Add user to Admin group
 ________________________________________
 🗄 Database Design
 Relationships:
