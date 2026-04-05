@@ -1,239 +1,376 @@
-🏀 BasketballLeague – Django Web Application
+🏀 BasketballLeague – Django Advanced Web Application
 
+📌 Project Description BasketballLeague is a full-stack Django application for managing basketball teams, players, games, awards, and player statistics.
 
-📌 Project Description
-BasketballLeague is a Django-based web application for managing basketball teams, players, games, statistics, and awards.
-The system allows:
+This advanced version extends the original project with:
 
-•	Creating and managing Teams
+Authentication & Authorization (Groups, Permissions, Extended User Model)
+Custom Middleware & Session Management
+REST API (Django REST Framework)
+Asynchronous Processing (Celery + Redis)
+Cloud Deployment (Azure App Service + PostgreSQL + Redis + Cloudinary)
+Automated Testing
+Clean architecture using Class-Based Views and modular design
 
-•	Managing Players and assigning them to Teams
+The project is fully functional both locally and in production and follows Django best practices.
+________________________________________
+🌍 Live Demo  
+https://basketball2026-b2hxfvaaawc3ckep.spaincentral-01.azurewebsites.net
 
-•	Recording Games between Teams
+The application is deployed on Azure App Service and fully functional.
+________________________________________
+🔐 Access & Testing the Application
 
-•	Tracking Player statistics per Game
+The application can be tested directly via the Live Demo.
 
-•	Assigning Awards to Players
+👤 Demo Accounts
 
-•	Filtering, sorting, and paginating data in the frontend
+Admin user
 
-•	Performing full CRUD operations with confirmation pages
+Username: admin
+Password: admin
+Permissions:
+is_staff = True
+Member of Admin group
+Full CRUD access to all resources
 
-The project demonstrates Django concepts including relational modeling, filtering with GET parameters, pagination, and environment-based configuration.
+Fan user
+
+Username: testfan
+Password: 12test34
+Permissions:
+Member of Fan group
+Read-only access
+📝 Register New User
+
+New users can register from:
+
+/accounts/register/
+Automatically assigned to Fan group
+Have read-only permissions by default
 ________________________________________
 ⚙️ Technologies Used
-
-•	Python 3.12
-
-•	Django 6.0.2
-
-•	PostgreSQL (production configuration)
-
-•	SQLite (automatic fallback for local/testing)
-
-•	Bootstrap 5
-
-•	Pillow (image handling)
-
-•	python-dotenv (environment variable management)
+Python 3.11+
+Django 5.2.10
+Django REST Framework
+PostgreSQL (Azure production)
+SQLite (local fallback)
+Redis (Azure Cache for Redis)
+Celery (background tasks)
+Cloudinary (media storage)
+Gunicorn (production WSGI server)
+WhiteNoise (static files)
+Bootstrap 5
+python-dotenv
 ________________________________________
 📦 Requirements
-
+amqp==5.3.1
 asgiref==3.11.1
-
-Django==6.0.2
-
+billiard==4.2.4
+celery==5.6.3
+certifi==2026.2.25
+charset-normalizer==3.4.7
+click==8.3.1
+click-didyoumean==0.3.1
+click-plugins==1.1.1.2
+click-repl==0.3.0
+cloudinary==1.44.1
+colorama==0.4.6
+Django==5.2.10
+django-cloudinary-storage==0.3.0
+djangorestframework==3.17.1
+gunicorn==25.3.0
+idna==3.11
+kombu==5.6.2
+packaging==26.0
 pillow==12.1.0
-
+prompt_toolkit==3.0.52
 psycopg2-binary==2.9.11
-
+python-dateutil==2.9.0.post0
 python-dotenv==1.2.1
-
+redis==7.4.0
+requests==2.33.1
+six==1.17.0
 sqlparse==0.5.5
-
 tzdata==2025.3
+tzlocal==5.3.1
+urllib3==2.6.3
+vine==5.1.0
+wcwidth==0.6.0
+whitenoise==6.12.0
 ________________________________________
-🚀 Installation & Setup
 
-1️⃣ Clone the repository
+📦 Installation & Local Setup
+1️⃣ Clone repository
 git clone https://github.com/Damyansh/BasketballLeague.git
 cd BasketballLeague
-Or download ZIP from GitHub and extract it.
-________________________________________
-2️⃣ Create virtual environment (recommended)
-Windows:
+2️⃣ Create virtual environment
 python -m venv venv
-venv\Scripts\activate
-Mac/Linux:
-python -m venv venv
-source venv/bin/activate
-________________________________________
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Linux/Mac
 3️⃣ Install dependencies
 pip install -r requirements.txt
-________________________________________
-4️⃣ Set up settings.py Database with this
-credentials:
-SECRET_KEY="django-insecure-ef_*a=semng1imhq_-oos4psfn079g(_)((eiu0ealm8#dabpf"
-
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "basketball_league",
-        "USER": "postgres",
-        "PASSWORD": "damyansh12",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
-    }
-}
-________________________________________
-5️⃣ Apply migrations
-python manage.py makemigrations
-python manage.py migrate
-________________________________________
-6️⃣ Run the development server
-python manage.py runserver
-Open in browser:
-http://127.0.0.1:8000/
-________________________________________
-7️⃣ Create Superuser
-python manage.py createsuperuser
-________________________________________
-🌍 Database Configuration
-The project supports:
-
-•	SQLite (default – no setup required)
-
-•	PostgreSQL (optional via environment variables)
-
-If no environment variables are provided, the application automatically uses SQLite, ensuring it runs immediately after installation without modifications.
-________________________________________
-🔑 Environment Variables
-The project uses a .env file located in the root directory
-(same level as manage.py).
-The .env file is excluded from version control for security reasons.
-🔒 Hidden Variables
-The following sensitive variables are stored in .env:
-
-•	SECRET_KEY
-
-•	DB_NAME
-
-•	DB_USER
-
-•	DB_PASS
-
-•	DB_PORT
-
-•	DB_HOST
-
-📄 Example .env Structure
+4️⃣ Set up settings.py Database with this credentials:
 
 SECRET_KEY=django-insecure-ef_*a=semng1imhq_-oos4psfn079g(_)((eiu0ealm8#dabpf
 
 DB_NAME=basketball_league
-
 DB_USER=postgres
-
 DB_PASS=damyansh12
-
 DB_PORT=5432
-
 DB_HOST=127.0.0.1
-
-⚠️ The real credentials are not included in the repository for security reasons.
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost
+CSRF_TRUSTED_ORIGINS=http://127.0.0.1,http://localhost
+CELERY_BROKER_URL=redis://127.0.0.1:6379/0
+CELERY_RESULT_BACKEND=redis://127.0.0.1:6379/0
+CLOUDINARY_CLOUD_NAME=dl2ui4ztv
+CLOUDINARY_API_KEY=441948988886259
+CLOUDINARY_API_SECRET=kDIXzlaUfH971cNTKH3b4IQxjxU
+5️⃣ Apply migrations
+ python manage.py makemigrations python manage.py migrate
+6️⃣ Run the development server python manage.py runserver Open in browser: http://127.0.0.1:8000/
+7️⃣ Create Superuser 
+python manage.py createsuperuser
 ________________________________________
-📊 Database Relationships
-
-•	One Team → Many Players (ForeignKey)
-
-•	One Award(title + year) → Many Players (ManyToMany)
-
-•	One Game → Two Teams (home & away)
-
-•	One Game → Many Players (ManyToMany through GamePlayerStats)
-
-•	Intermediate model: GamePlayerStats
-
-•	Data integrity enforced through model validation and form validation
-
-________________________________________
-🛠 Features
-🔹 Core Functionality
-
-•	Full CRUD operations (Create, Read, Update, Delete)
-
-•	Delete confirmation pages for safe data removal
-
-•	PostgreSQL production-ready configuration
-
-•	SQLite automatic fallback for easy setup
-
-🔹 Filtering & Sorting
-
-•	Filter players by team
-
-•	Sort players by:
-
-o	Name
-
-o	Team
-
-o	Points per game
-
-o	Rebounds per game
-
-o	Assists per game
-
-•	Filter games by team and date
-
-🔹 Pagination
-
-•	Paginated Teams list on the home page
-
-•	Paginated Players list with preserved filtering & sorting
-
-•	Dynamic page navigation (First / Previous / Next / Last)
-
-🔹 UI & Forms
-
-•	Bootstrap 5 styling
-
-•	Image upload support (team logos)
-
-•	Custom form labels, widgets and validation messages
-
-•	Custom template tags
+🌍 Database Configuration The project supports:
+• SQLite (default – no setup required)
+• PostgreSQL (optional via environment variables)
+If no environment variables are provided, the application automatically uses SQLite, ensuring it runs immediately after installation without modifications.
 
 ________________________________________
-📈 Scalability & Architecture Highlights
+🔄 Running Locally (Async Mode)
 
-This project demonstrates:
+Local development uses full asynchronous processing.
 
-•	QuerySet filtering with GET parameters
+Terminal 1 – Redis
+redis-server
+Terminal 2 – Celery worker
+celery -A BasketballLeague worker --loglevel=info --pool=solo
+Terminal 3 – Django server
+python manage.py runserver
 
-•	Safe pagination applied after filtering and sorting
+Tasks like:
 
-•	Separation of concerns (apps: teams, players, games, common)
+notify_new_player.delay(...)
+notify_new_game.delay(...)
 
-•	Environment-based database configuration
+run asynchronously.
+________________________________________
+🔐 Authentication & Authorization
+✔ Extended User Model
 
-•	Through models for complex ManyToMany relationships
+A Profile model extends Django’s built-in User.
 
-•	Proper confirmation before destructive operations
+✔ Groups & Permissions
+Group	Permissions
+Admin	Full CRUD
+Fan	Read-only
+✔ Registration Behavior
+New users are automatically assigned to Fan group
+Only users who are:
+is_staff=True
+AND part of Admin group
+
+can create, edit, or delete data.
+________________________________________
+🧠 Custom Middleware & Sessions
+VisitCounterMiddleware → counts user visits
+LastVisitedMiddleware → tracks last visited page
+BlockAnonymousPostMiddleware → blocks unauthorized POST requests
+________________________________________
+🌐 REST API (Django REST Framework)
+Endpoints:
+/api/teams/
+/api/players/
+/api/games/
+Features:
+ModelViewSet implementation
+Serializers for all models
+Permission class: IsAdminOrReadOnly
+Full CRUD via API (admin only)
+________________________________________
+⚡ Asynchronous Processing (Celery + Redis)
+Local Development (Async Mode)
+redis-server
+celery -A BasketballLeague worker --loglevel=info --pool=solo
+python manage.py runserver
+
+Tasks run asynchronously using .delay().
+________________________________________
+☁️ Azure Deployment (Sync Mode)
+
+Azure App Service supports only one main process per container, so Celery workers cannot run alongside Gunicorn.
+
+✔ Implemented solution:
+if settings.DEBUG:
+    task.delay()
+else:
+    task()
+✔ Result:
+Local → async (Celery + Redis)
+Production → sync (stable execution)
+Redis remains configured
+________________________________________
+☁️ Azure Deployment Details
+Startup Command
+gunicorn BasketballLeague.wsgi
+Environment Variables (Azure)
+Configured in Azure App Service (not included in repository for security reasons):
+
+- DEBUG=False
+- SECRET_KEY
+- DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT
+- CLOUDINARY_*
+- CELERY_BROKER_URL
+- CELERY_RESULT_BACKEND
+- ALLOWED_HOSTS
+- CSRF_TRUSTED_ORIGINS
+Redis URL format:
+rediss://:PASSWORD@HOST:6380/0?ssl_cert_reqs=none
+________________________________________
+⚠️ Important Azure Setup Steps
+
+After deployment:
+
+python manage.py createsuperuser
+
+Then in Admin panel:
+
+Create groups:
+Admin
+Fan
+Assign:
+is_staff=True
+Add user to Admin group
+________________________________________
+🗄 Database Design
+Relationships:
+Team → Players (One-to-Many)
+Game → Teams (Two Foreign Keys)
+Game ↔ Players (Many-to-Many via GamePlayerStats)
+Awards ↔ Players (Many-to-Many)
+User ↔ Profile (One-to-One)
+________________________________________
+🛠 Features Overview
+Full CRUD (Teams, Players, Games)
+Filtering & Sorting
+Pagination
+Cloudinary image uploads
+Default images
+Bootstrap UI
+Confirmation pages
+Custom template tags
+Responsive design
+Navigation across all pages
+________________________________________
+🧪 Testing
+
+Run:
+
+python manage.py test
+
+Includes:
+
+Model tests
+View tests
+Permission tests
+Authentication checks
+15+ test cases
+________________________________________
+🔐 Security
+Environment variables for secrets
+CSRF protection
+Middleware for request validation
+No hardcoded credentials
+Input validation in forms and models
+________________________________________
+📈 Architecture & Advanced Features
+
+This project demonstrates a scalable and production-ready Django architecture, including:
+
+Core Architecture
+
+Separation of concerns using multiple apps:
+teams, players, games, accounts, common
+Use of Class-Based Views (CBVs) for modular and reusable logic 
+Clean URL structure with namespacing
+Environment-based configuration (development vs production)
+
+Database Design
+
+Complex relationships:
+One-to-Many (Team → Players)
+Many-to-Many (Players ↔ Awards)
+Many-to-Many through model (GamePlayerStats)
+PostgreSQL in production, SQLite fallback locally
+Data validation at both model and form level
+
+Authentication & Authorization
+
+Extended User model via Profile (One-to-One)
+Role-based access control using Groups:
+Admin (full access)
+Fan (read-only)
+Permission-based view protection
+
+Middleware & Sessions
+
+Custom middleware for:
+Visit tracking (session-based)
+Last visited page tracking
+Blocking unauthorized POST requests
+Demonstrates session management and request lifecycle control
+
+REST API Integration
+
+Django REST Framework with:
+ModelViewSet architecture
+Serializers for all major models
+Custom permission class (IsAdminOrReadOnly)
+Fully functional REST endpoints for external integration
+
+Asynchronous Processing
+
+Celery + Redis integration for background tasks
+Environment-based execution:
+Async in development
+Sync fallback in production (Azure limitation)
+Demonstrates real-world distributed task handling
+
+Cloud & Deployment
+
+Deployed on Azure App Service
+Azure PostgreSQL database
+Azure Redis Cache (configured)
+Cloudinary for media storage
+Gunicorn as WSGI server
+
+Frontend & UX
+
+Bootstrap-based responsive design
+Pagination, filtering, sorting
+Custom template tags
+Reusable templates and components
+
+Testing & Reliability
+
+15+ unit tests covering:
+Models
+Views
+Permissions
+Ensures application stability and correctness
 
 ________________________________________
 ✅ Project Status
 
-The project is fully:
-
-•	Downloadable
-
-•	Installable
-
-•	Database-ready (SQLite by default)
+✔ Fully functional locally
+✔ Fully deployed on Azure
+✔ Covers all Django Advanced requirements
+✔ Ready for evaluation
 
 Designed for academic demonstration of Django best practices.
+________________________________________
 
 ## 📸 Screenshots
 
